@@ -49,11 +49,13 @@
       </div>
     </div>
 
-    <!-- Chart -->
+    <div class="chart-wrapper">
+    <h2 class="chart-title"> Live Chart Visualization</h2>
     <div class="chart-container">
       <canvas ref="chartCanvas"></canvas>
     </div>
   </div>
+  </div> 
 </template>
 
 <script setup>

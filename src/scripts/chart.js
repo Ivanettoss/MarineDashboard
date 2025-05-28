@@ -1,6 +1,7 @@
 import { Chart } from "chart.js/auto";
 let chartInstance = null;
 export function updateChart(canvasElement, data) {
+  
   console.log("Dati ricevuti dal grafico:", data);
 
   if (!canvasElement) {
