@@ -17,44 +17,41 @@
     </div>
 
     <!-- Table -->
-  <div class="table-wrapper">
-  <div class="table-section">
-    <table>
-      <thead>
-        <tr>
-          <th>Timestamp</th>
-          <th>Buoy ID</th>
-          <th>Temperature (°C)</th>
-          <th>Salinity (PSU)</th>
-          <th>Depth (m)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="record in paginatedData" :key="record.id">
-          <td>{{ record.timestamp }}</td>
-          <td>{{ record.buoy }}</td>
-          <td>{{ record.temp }}</td>
-          <td>{{ record.salinity }}</td>
-          <td>{{ record.depth }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-    <div class="pagination-controls">
-  <button @click="currentPage--" :disabled="currentPage === 1">«</button>
-
-  <span class="page-indicator">
-    Pagina {{ currentPage }} di {{ totalPages }}
-  </span>
-
-  <button @click="currentPage++" :disabled="currentPage === totalPages">»</button>
+    <div class="table-wrapper">
+      <div class="table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Buoy ID</th>
+              <th>Temperature (°C)</th>
+              <th>Salinity (PSU)</th>
+              <th>Depth (m)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="record in paginatedData" :key="record.id">
+              <td>{{ record.timestamp }}</td>
+              <td>{{ record.buoy }}</td>
+              <td>{{ record.temp }}</td>
+              <td>{{ record.salinity }}</td>
+              <td>{{ record.depth }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-controls">
+        <button @click="currentPage--" :disabled="currentPage === 1">«</button>
+        <span class="page-indicator">
+          Pagina {{ currentPage }} di {{ totalPages }}
+        </span>
+        <button @click="currentPage++" :disabled="currentPage === totalPages">»</button>
+      </div>
     </div>
-  </div>
 
-  
     <!-- Chart -->
     <div class="chart-container">
-      <canvas id="chart"></canvas>
+      <canvas ref="chartCanvas"></canvas>
     </div>
   </div>
 </template>
@@ -66,6 +63,9 @@ import { preprocessRecords } from './scripts/preprocessing.js';
 import { filterByDateRange, filterByVariable } from './scripts/filters.js';
 import { updateChart } from './scripts/chart.js';
 
+// === Ref elementi DOM ===
+const chartCanvas = ref(null);
+
 // === Dati reattivi ===
 const rawData = ref([]);
 const processedData = ref([]);
@@ -75,7 +75,6 @@ const toDate = ref("");
 const selectedVariable = ref("ALL");
 const currentPage = ref(1);
 const itemsPerPage = ref(50);
-
 
 // === Filtro 1: per search ===
 const filteredBySearch = computed(() => {
@@ -96,10 +95,18 @@ const finalFilteredData = computed(() => {
   return filterByVariable(filteredByDate.value, selectedVariable.value);
 });
 
-// === Sincronizza il chart ogni volta che i dati finali cambiano ===
+// === Watch: aggiorna il chart quando i dati cambiano ===
 watch(finalFilteredData, async (newData) => {
-  await nextTick();
-  updateChart("chart", newData);
+  try {
+    await nextTick();
+    if (chartCanvas.value) {
+      updateChart(chartCanvas.value, newData);
+    } else {
+      console.warn("Elemento canvas non trovato (ref nullo).");
+    }
+  } catch (e) {
+    console.error("Errore nell'aggiornamento del chart:", e);
+  }
 });
 
 // === Caricamento iniziale ===
@@ -109,15 +116,17 @@ onMounted(async () => {
     rawData.value = raw;
     processedData.value = preprocessRecords(raw);
     await nextTick();
-    updateChart("chart", processedData.value);
+    if (chartCanvas.value) {
+      updateChart(chartCanvas.value, processedData.value);
+    } else {
+      console.warn("Canvas non trovato durante il montaggio.");
+    }
   } catch (err) {
     console.error("Errore nel caricamento dati:", err);
   }
 });
 
-
-// Paginator management 
-
+// === Paginazione ===
 const totalPages = computed(() => {
   return Math.ceil(finalFilteredData.value.length / itemsPerPage.value);
 });
@@ -131,7 +140,4 @@ const paginatedData = computed(() => {
 watch(finalFilteredData, () => {
   currentPage.value = 1;
 });
-
-
-
 </script>

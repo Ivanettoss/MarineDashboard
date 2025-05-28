@@ -1,8 +1,14 @@
-
+import { Chart } from "chart.js/auto";
 let chartInstance = null;
+export function updateChart(canvasElement, data) {
+  console.log("Dati ricevuti dal grafico:", data);
 
-export function updateChart(canvasId, data) {
-  const ctx = document.getElementById(canvasId).getContext("2d");
+  if (!canvasElement) {
+    console.warn("Canvas element non fornito a updateChart");
+    return;
+  }
+
+  const ctx = canvasElement.getContext("2d");
 
   const labels = data.map(r => r.timestamp);
   const temperatures = data.map(r => r.temp);
@@ -46,3 +52,4 @@ export function updateChart(canvasId, data) {
     },
   });
 }
+
