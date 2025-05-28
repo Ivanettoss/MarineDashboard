@@ -1,57 +1,118 @@
 body {
-    font-family: sans-serif;
-    background: #f2f8fc;
-    margin: 0;
-    padding: 20px;
-  }
-  
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
-  .dashboard-title {
-    color: #0077aa;
-    font-weight: bold;
-    margin-bottom: 4px;
-  }
-  
-  .subtitle {
-    color: #444;
-    margin-bottom: 20px;
-  }
-  
-  .filters {
-    margin-bottom: 15px;
-  }
-  
-  input[type="text"] {
-    padding: 6px 10px;
-    font-size: 1rem;
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
-    background: white;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-  }
-  
-  thead {
-    background-color: #e9f6fb;
-  }
-  
-  .chart-container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
+  font-family: sans-serif;
+  background: #f2f8fc;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.dashboard-title {
+  color: #0077aa;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.filters {
+  margin-bottom: 15px;
+}
+
+input[type="text"] {
+  padding: 6px 10px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px; /* Regolabile */
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.table-section {
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Tabella dentro table-section */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: #e9f6fb;
+  z-index: 2;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+thead {
+  background-color: #e9f6fb;
+}
+
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  border-top: 1px solid #ddd;
+  background-color: #fafafa;
+  height: 30px; 
+  flex-shrink: 0;
+}
+
+.pagination-controls button {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-weight: bold;
+}
+
+/* === CHART === */
+.chart-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}

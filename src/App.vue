@@ -17,6 +17,8 @@
     </div>
 
     <!-- Table -->
+  <div class="table-wrapper">
+  <div class="table-section">
     <table>
       <thead>
         <tr>
@@ -28,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="record in finalFilteredData" :key="record.id">
+        <tr v-for="record in paginatedData" :key="record.id">
           <td>{{ record.timestamp }}</td>
           <td>{{ record.buoy }}</td>
           <td>{{ record.temp }}</td>
@@ -37,7 +39,19 @@
         </tr>
       </tbody>
     </table>
+  </div>
+    <div class="pagination-controls">
+  <button @click="currentPage--" :disabled="currentPage === 1">«</button>
 
+  <span class="page-indicator">
+    Pagina {{ currentPage }} di {{ totalPages }}
+  </span>
+
+  <button @click="currentPage++" :disabled="currentPage === totalPages">»</button>
+    </div>
+  </div>
+
+  
     <!-- Chart -->
     <div class="chart-container">
       <canvas id="chart"></canvas>
@@ -59,6 +73,9 @@ const search = ref("");
 const fromDate = ref("");
 const toDate = ref("");
 const selectedVariable = ref("ALL");
+const currentPage = ref(1);
+const itemsPerPage = ref(50);
+
 
 // === Filtro 1: per search ===
 const filteredBySearch = computed(() => {
@@ -97,4 +114,24 @@ onMounted(async () => {
     console.error("Errore nel caricamento dati:", err);
   }
 });
+
+
+// Paginator management 
+
+const totalPages = computed(() => {
+  return Math.ceil(finalFilteredData.value.length / itemsPerPage.value);
+});
+
+const paginatedData = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return finalFilteredData.value.slice(start, end);
+});
+
+watch(finalFilteredData, () => {
+  currentPage.value = 1;
+});
+
+
+
 </script>
