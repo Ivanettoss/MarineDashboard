@@ -47,6 +47,23 @@ body {
   text-align: right;
  
 }
+.toggle-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.advanced-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
 
 input[type="text"],
 input[type="date"],

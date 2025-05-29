@@ -4,29 +4,38 @@
     <p class="subtitle">Real-time oceanographic data visualization</p>
 
     <!-- Filters -->
+
     <div class="filters">
-      <div class="datepicker">
-            <div class="dateline">
-              <label for="fromDate">from</label>
-              <input v-model="fromDate" type="date" />
-            </div>
+  <button @click="showFilters = !showFilters" class="toggle-button">
+    {{ showFilters ? 'Nascondi filtri' : 'Mostra filtri' }}
+  </button>
+  <div v-if="showFilters" class="advanced-filters">
 
-            <div class="dateline">
-              <label for="toDate">to</label>
-              <input v-model="toDate" type="date" />
-            </div>
-        </div> 
+    <div class="datepicker">
+      <div class="dateline">
+        <label for="fromDate">From</label>
+        <input v-model="fromDate" type="date" id="fromDate" />
+      </div>
 
-      <select v-model="selectedVariable">
-        <option value="ALL">All</option>
-        <option value="temp">Temperature</option>
-        <option value="salinity">Salinity</option>
-        <option value="depth">Depth</option>
-      </select>
-      <input v-model="search" type="text" placeholder="Search by buoy ID..." />
+      <div class="dateline">
+        <label for="toDate">To</label>
+        <input v-model="toDate" type="date" id="toDate" />
+      </div>
     </div>
 
-    <!-- Table -->
+    <select  v-model="selectedVariable">
+      <option value="ALL">All</option>
+      <option value="temp">Temperature</option>
+      <option value="salinity">Salinity</option>
+      <option value="depth">Depth</option>
+    </select>
+  </div>
+  <input v-model="search" type="text" placeholder="Search by buoy ID..." />
+</div>
+
+    
+
+
     <div class="table-wrapper">
       <div class="table-section">
         <table>
@@ -87,6 +96,8 @@ const toDate = ref("");
 const selectedVariable = ref("ALL");
 const currentPage = ref(1);
 const itemsPerPage = ref(50);
+const showFilters = ref(false)
+
 
 // === Filtro 1: per search ===
 const filteredBySearch = computed(() => {
