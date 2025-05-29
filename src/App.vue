@@ -34,6 +34,21 @@
       <option value="salinity">Salinity</option>
       <option value="depth">Depth</option>
     </select>
+
+    <div class="location-filter">
+    <label for="locationInput">Search by Location</label>
+    <input  v-model="locationInput" type="text"id="locationInput" placeholder="Es. Ibiza..."
+    />
+
+    <label for="rangeSelect">Distance range(km)</label>
+    <select v-model="distanceRange" id="rangeSelect">
+      <option :value="10">10 km</option>
+      <option :value="100">100 km</option>
+      <option :value="1000">1000 km</option>
+    </select>
+
+  </div>
+    
   </div>
   <input v-model="search" type="text" placeholder="Search by buoy ID..." />
 </div>
@@ -47,6 +62,8 @@
           <thead>
             <tr>
               <th>Timestamp</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
               <th>Buoy ID</th>
               <th>Temperature (°C)</th>
               <th>Salinity (PSU)</th>
@@ -56,6 +73,8 @@
           <tbody>
             <tr v-for="record in paginatedData" :key="record.id">
               <td>{{ record.timestamp }}</td>
+              <td>{{ record.lat }}</td>
+              <td>{{ record.lon }}</td>
               <td>{{ record.buoy }}</td>
               <td>{{ record.temp }}</td>
               <td>{{ record.salinity }}</td>
@@ -86,7 +105,7 @@
 import { ref, onMounted, computed, watch, nextTick } from "vue";
 import { fetchData } from './scripts/api_management.js';
 import { preprocessRecords } from './scripts/preprocessing.js';
-import { filterByDateRange, filterByVariable } from './scripts/filters.js';
+import { filterByDateRange, filterByVariable, filterByLocation } from './scripts/filters.js';
 import { updateChart } from './scripts/chart.js';
 
 // === Ref elementi DOM ===
@@ -101,10 +120,12 @@ const toDate = ref("");
 const selectedVariable = ref("ALL");
 const currentPage = ref(1);
 const itemsPerPage = ref(50);
-const showFilters = ref(false)
+const showFilters = ref(false);
+const locationInput = ref("");
+const distanceRange = ref(100);
+const locationFilteredData = ref([]);
 
-
-// === Filtro 1: per search ===
+// === Filtro: per search ===
 const filteredBySearch = computed(() => {
   if (!search.value.trim()) return processedData.value;
   return processedData.value.filter(record =>
@@ -112,18 +133,35 @@ const filteredBySearch = computed(() => {
   );
 });
 
-// === Filtro 2: per intervallo di date ===
+// === Filtro: per date ===
 const filteredByDate = computed(() => {
   if (!fromDate.value || !toDate.value) return filteredBySearch.value;
   return filterByDateRange(filteredBySearch.value, fromDate.value, toDate.value);
 });
 
-// === Filtro 3: per variabile ===
+// === Filtro asincrono: per location ===
+watch( [locationInput, distanceRange, filteredByDate],
+  async ([loc, range, dateFilteredData]) => {
+    if (!loc.trim()) {
+      locationFilteredData.value = dateFilteredData;
+      return;
+    }
+    try {
+      locationFilteredData.value = await filterByLocation(dateFilteredData,loc.trim(),range);
+    } catch (e) {
+      console.error("Errore nel filtro per location:", e);
+      locationFilteredData.value = [];
+    }
+  },
+  { immediate: true }
+);
+
+// === Filtro: per variabile ===
 const finalFilteredData = computed(() => {
-  return filterByVariable(filteredByDate.value, selectedVariable.value);
+  return filterByVariable(locationFilteredData.value, selectedVariable.value);
 });
 
-// === Watch: aggiorna il chart quando i dati cambiano ===
+// === Watch: aggiorna il chart ===
 watch(finalFilteredData, async (newData) => {
   try {
     await nextTick();
@@ -160,9 +198,10 @@ const totalPages = computed(() => {
 });
 
 const paginatedData = computed(() => {
+  const data = finalFilteredData.value || [];
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
-  return finalFilteredData.value.slice(start, end);
+  return data.slice(start, end);
 });
 
 watch(finalFilteredData, () => {
