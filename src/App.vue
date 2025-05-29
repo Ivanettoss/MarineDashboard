@@ -5,15 +5,25 @@
 
     <!-- Filters -->
     <div class="filters">
-      <input v-model="search" type="text" placeholder="Search by buoy ID..." />
-      <input v-model="fromDate" type="date" />
-      <input v-model="toDate" type="date" />
+      <div class="datepicker">
+            <div class="dateline">
+              <label for="fromDate">from</label>
+              <input v-model="fromDate" type="date" />
+            </div>
+
+            <div class="dateline">
+              <label for="toDate">to</label>
+              <input v-model="toDate" type="date" />
+            </div>
+        </div> 
+
       <select v-model="selectedVariable">
         <option value="ALL">All</option>
         <option value="temp">Temperature</option>
         <option value="salinity">Salinity</option>
         <option value="depth">Depth</option>
       </select>
+      <input v-model="search" type="text" placeholder="Search by buoy ID..." />
     </div>
 
     <!-- Table -->
