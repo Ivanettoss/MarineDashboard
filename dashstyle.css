@@ -50,10 +50,9 @@ body {
 .toggle-button {
   padding: 6px 12px;
   font-size: 14px;
-  background-color: #007acc;
-  color: white;
+  background:none;
   border: none;
-  border-radius: 4px;
+
   cursor: pointer;
 }
 
@@ -64,6 +63,17 @@ body {
   align-items: flex-start;
 }
 
+.icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  color: #2373b4; /* es. text-gray-600 */
+  transition: color 0.2s ease;
+}
+
+.icon:hover {
+  color: #7d9dd1; /* es. text-blue-500 */
+}
 
 input[type="text"],
 input[type="date"],

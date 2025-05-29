@@ -3,12 +3,17 @@
     <h1 class="dashboard-title">Marine Science Dashboard</h1>
     <p class="subtitle">Real-time oceanographic data visualization</p>
 
-    <!-- Filters -->
 
     <div class="filters">
-  <button @click="showFilters = !showFilters" class="toggle-button">
-    {{ showFilters ? 'Nascondi filtri' : 'Mostra filtri' }}
-  </button>
+      <button
+        @click="showFilters = !showFilters"
+        class="toggle-button"
+        aria-label="Mostra o nascondi i filtri">
+        <svg viewBox="0 0 24 24" class="icon">
+          <path d="M3 4h18v2H3V4zm3.5 6h11l-4 5v5l-3 2v-7l-4-5z" />
+        </svg>
+      </button>
+
   <div v-if="showFilters" class="advanced-filters">
 
     <div class="datepicker">
