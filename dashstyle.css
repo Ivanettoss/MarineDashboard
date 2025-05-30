@@ -43,10 +43,18 @@ body {
 
 .dateline label {
   display: inline-block;
-  width: 30px;       
+  width: 33px;       
   text-align: right;
  
 }
+
+
+.location-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* spazio verticale tra label/input/select */
+}
+  
 .toggle-button {
   padding: 6px 12px;
   font-size: 14px;
@@ -61,18 +69,22 @@ body {
   flex-wrap: wrap;
   gap: 12px;
   align-items: flex-start;
+  background-color: #7dbfd16d;
+  padding: 5px;
+  border-radius: 6px;
+  border:3px;
 }
 
 .icon {
   width: 24px;
   height: 24px;
   fill: currentColor;
-  color: #2373b4; /* es. text-gray-600 */
+  color: #2373b4; 
   transition: color 0.2s ease;
 }
 
 .icon:hover {
-  color: #7d9dd1; /* es. text-blue-500 */
+  color: #7d9dd1; 
 }
 
 input[type="text"],
@@ -89,7 +101,7 @@ select {
 .table-wrapper {
   display: flex;
   flex-direction: column;
-  max-height: 500px; /* Regolabile */
+  max-height: 500px; 
   background: white;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -101,7 +113,7 @@ select {
   flex: 1;
 }
 
-/* Tabella dentro table-section */
+
 table {
   border-collapse: collapse;
   width: 100%;

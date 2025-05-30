@@ -37,16 +37,15 @@
 
     <div class="location-filter">
     <label for="locationInput">Search by Location</label>
-    <input  v-model="locationInput" type="text"id="locationInput" placeholder="Es. Ibiza..."
+    <input  v-model="locationInput" type="text" id="locationInput" placeholder="Es. Ibiza..."
     />
 
-    <label for="rangeSelect">Distance range(km)</label>
+    <label for="rangeSelect">Range(km)</label>
     <select v-model="distanceRange" id="rangeSelect">
       <option :value="10">10 km</option>
       <option :value="100">100 km</option>
       <option :value="1000">1000 km</option>
     </select>
-
   </div>
     
   </div>
