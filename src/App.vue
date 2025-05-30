@@ -85,7 +85,7 @@
       <div class="pagination-controls">
         <button @click="currentPage--" :disabled="currentPage === 1">«</button>
         <span class="page-indicator">
-          Pagina {{ currentPage }} di {{ totalPages }}
+           {{ currentPage }} - {{ totalPages }}
         </span>
         <button @click="currentPage++" :disabled="currentPage === totalPages">»</button>
       </div>

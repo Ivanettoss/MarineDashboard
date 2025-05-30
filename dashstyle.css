@@ -52,7 +52,7 @@ body {
 .location-filter {
     display: flex;
     flex-direction: column;
-    gap: 6px; /* spazio verticale tra label/input/select */
+    gap: 6px; 
 }
   
 .toggle-button {
@@ -102,8 +102,6 @@ select {
   display: flex;
   flex-direction: column;
   max-height: 500px; 
-  background: white;
-  border: 1px solid #ddd;
   border-radius: 6px;
   overflow: hidden;
 }
@@ -117,7 +115,6 @@ select {
 table {
   border-collapse: collapse;
   width: 100%;
-  background: white;
 }
 
 thead th {
@@ -145,16 +142,13 @@ thead {
   gap: 6px;
   padding: 6px 8px;
   font-size: 0.8rem;
-  border-top: 1px solid #ddd;
-  background-color: #fafafa;
-  height: 30px; 
+  height: 35px; 
   flex-shrink: 0;
 }
 
 .pagination-controls button {
   padding: 4px 10px;
   font-size: 0.8rem;
-  background-color: white;
   border: 1px solid #ccc;
   border-radius: 4px;
   cursor: pointer;
@@ -175,15 +169,15 @@ thead {
 }
 
 .chart-wrapper {
-  margin-top: 100px; /* distanza dalla tabella */
+  margin-top: 100px; 
 }
 
 .chart-title {
   margin-bottom: 12px;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #0077aa;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
 }
 
 .chart-container {
