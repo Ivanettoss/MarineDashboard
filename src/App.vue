@@ -90,6 +90,7 @@
         <button @click="currentPage++" :disabled="currentPage === totalPages">»</button>
       </div>
     </div>
+    <Map :markers="markers" />
 
     <div class="chart-wrapper">
     <h2 class="chart-title"> Live Chart Visualization</h2>
@@ -106,6 +107,7 @@ import { fetchData } from './scripts/api_management.js';
 import { preprocessRecords } from './scripts/preprocessing.js';
 import { filterByDateRange, filterByVariable, filterByLocation } from './scripts/filters.js';
 import { updateChart } from './scripts/chart.js';
+import Map from './components/Map.vue';
 
 // === Ref elementi DOM ===
 const chartCanvas = ref(null);
@@ -206,4 +208,14 @@ const paginatedData = computed(() => {
 watch(finalFilteredData, () => {
   currentPage.value = 1;
 });
+
+
+const markers = computed(() => {
+  return finalFilteredData.value.map(record => ({
+    lat: record.lat,
+    lng: record.lon,
+    label: `Buoy: ${record.buoy}\n`
+  }));
+});
+
 </script>
