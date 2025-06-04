@@ -50,12 +50,16 @@
     
   </div>
   <input v-model="search" type="text" placeholder="Search by buoy ID..." />
+
+  <button @click="currentView = currentView === 'table' ? 'map' : 'table'">
+  {{ currentView === 'table' ? 'Show Map' : 'Show Table' }}
+</button>
 </div>
 
-    
 
+<Map v-if="currentView === 'map'":markers="updateMarkers" />
 
-    <div class="table-wrapper">
+    <div v-else class="table-wrapper">
       <div class="table-section">
         <table>
           <thead>
@@ -90,7 +94,7 @@
         <button @click="currentPage++" :disabled="currentPage === totalPages">»</button>
       </div>
     </div>
-    <Map :markers="markers" />
+    
 
     <div class="chart-wrapper">
     <h2 class="chart-title"> Live Chart Visualization</h2>
@@ -125,6 +129,11 @@ const showFilters = ref(false);
 const locationInput = ref("");
 const distanceRange = ref(100);
 const locationFilteredData = ref([]);
+
+// table default, --> map 
+const currentView = ref("table");
+
+
 
 // === Filtro: per search ===
 const filteredBySearch = computed(() => {
@@ -210,7 +219,7 @@ watch(finalFilteredData, () => {
 });
 
 
-const markers = computed(() => {
+const updateMarkers = computed(() => {
   return finalFilteredData.value.map(record => ({
     lat: record.lat,
     lng: record.lon,
