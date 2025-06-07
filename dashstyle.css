@@ -185,3 +185,22 @@ thead {
   padding: 20px;
   border-radius: 10px;
 }
+
+#switch-view{
+  background-color:#0077aa;
+  border: none;
+  border-radius: 8px;
+  color:white;
+  padding: 10px 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  margin-bottom:4px;
+  
+}
+
+#switch-view:hover {
+
+}
+
+

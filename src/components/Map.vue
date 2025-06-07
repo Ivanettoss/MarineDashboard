@@ -20,7 +20,7 @@
   
   onMounted(() => {
     map = L.map('map').setView([42.030761, 11.909473], 13);
-    map.zoomControl.remove();
+    
   
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'

@@ -3,7 +3,6 @@
     <h1 class="dashboard-title">Marine Science Dashboard</h1>
     <p class="subtitle">Real-time oceanographic data visualization</p>
 
-
     <div class="filters">
       <button
         @click="showFilters = !showFilters"
@@ -14,50 +13,48 @@
         </svg>
       </button>
 
-  <div v-if="showFilters" class="advanced-filters">
+      <div v-if="showFilters" class="advanced-filters">
 
-    <div class="datepicker">
-      <div class="dateline">
-        <label for="fromDate">From</label>
-        <input v-model="fromDate" type="date" id="fromDate" />
-      </div>
+        <div class="datepicker">
+          <div class="dateline">
+            <label for="fromDate">From</label>
+            <input v-model="fromDate" type="date" id="fromDate" />
+          </div>
 
-      <div class="dateline">
-        <label for="toDate">To</label>
-        <input v-model="toDate" type="date" id="toDate" />
+          <div class="dateline">
+            <label for="toDate">To</label>
+            <input v-model="toDate" type="date" id="toDate" />
+          </div>
+        </div>
+
+        <!-- Rimosso filtro variabile -->
+
+        <div class="location-filter">
+          <label for="locationInput">Search by Location</label>
+          <input v-model="locationInput" type="text" id="locationInput" placeholder="Es. Ibiza..." />
+
+          <label for="rangeSelect">Range(km)</label>
+          <select v-model="distanceRange" id="rangeSelect">
+            <option :value="10">10 km</option>
+            <option :value="100">100 km</option>
+            <option :value="1000">1000 km</option>
+          </select>
+        </div>
       </div>
+      <input v-model="search" class="search-id" type="text" placeholder="Search by buoy ID..." />
+
     </div>
 
-    <select  v-model="selectedVariable">
-      <option value="ALL">All</option>
-      <option value="temp">Temperature</option>
-      <option value="salinity">Salinity</option>
-      <option value="depth">Depth</option>
-    </select>
-
-    <div class="location-filter">
-    <label for="locationInput">Search by Location</label>
-    <input  v-model="locationInput" type="text" id="locationInput" placeholder="Es. Ibiza..."
-    />
-
-    <label for="rangeSelect">Range(km)</label>
-    <select v-model="distanceRange" id="rangeSelect">
-      <option :value="10">10 km</option>
-      <option :value="100">100 km</option>
-      <option :value="1000">1000 km</option>
-    </select>
-  </div>
     
-  </div>
-  <input v-model="search" type="text" placeholder="Search by buoy ID..." />
 
-  <button @click="currentView = currentView === 'table' ? 'map' : 'table'">
-  {{ currentView === 'table' ? 'Show Map' : 'Show Table' }}
+ 
+     <button id="switch-view" @click="currentView = currentView === 'table' ? 'map' : 'table'">
+  {{ currentView === 'table' ? 'Show in Map' : 'Show in Grid' }}
 </button>
-</div>
+    
 
-
-<Map v-if="currentView === 'map'":markers="updateMarkers" />
+    <Map v-if="currentView === 'map'" :markers="updateMarkers" />
+     
 
     <div v-else class="table-wrapper">
       <div class="table-section">
@@ -89,27 +86,26 @@
       <div class="pagination-controls">
         <button @click="currentPage--" :disabled="currentPage === 1">«</button>
         <span class="page-indicator">
-           {{ currentPage }} - {{ totalPages }}
+          {{ currentPage }} - {{ totalPages }}
         </span>
         <button @click="currentPage++" :disabled="currentPage === totalPages">»</button>
       </div>
     </div>
-    
 
     <div class="chart-wrapper">
-    <h2 class="chart-title"> Live Chart Visualization</h2>
-    <div class="chart-container">
-      <canvas ref="chartCanvas"></canvas>
+      <h2 class="chart-title"> Live Chart Visualization</h2>
+      <div class="chart-container">
+        <canvas ref="chartCanvas"></canvas>
+      </div>
     </div>
   </div>
-  </div> 
 </template>
 
 <script setup>
 import { ref, onMounted, computed, watch, nextTick } from "vue";
 import { fetchData } from './scripts/api_management.js';
 import { preprocessRecords } from './scripts/preprocessing.js';
-import { filterByDateRange, filterByVariable, filterByLocation } from './scripts/filters.js';
+import { filterByDateRange, filterByLocation } from './scripts/filters.js';
 import { updateChart } from './scripts/chart.js';
 import Map from './components/Map.vue';
 
@@ -122,7 +118,7 @@ const processedData = ref([]);
 const search = ref("");
 const fromDate = ref("");
 const toDate = ref("");
-const selectedVariable = ref("ALL");
+// const selectedVariable = ref("ALL"); // Rimosso
 const currentPage = ref(1);
 const itemsPerPage = ref(50);
 const showFilters = ref(false);
@@ -132,8 +128,6 @@ const locationFilteredData = ref([]);
 
 // table default, --> map 
 const currentView = ref("table");
-
-
 
 // === Filtro: per search ===
 const filteredBySearch = computed(() => {
@@ -150,14 +144,14 @@ const filteredByDate = computed(() => {
 });
 
 // === Filtro asincrono: per location ===
-watch( [locationInput, distanceRange, filteredByDate],
+watch([locationInput, distanceRange, filteredByDate],
   async ([loc, range, dateFilteredData]) => {
     if (!loc.trim()) {
       locationFilteredData.value = dateFilteredData;
       return;
     }
     try {
-      locationFilteredData.value = await filterByLocation(dateFilteredData,loc.trim(),range);
+      locationFilteredData.value = await filterByLocation(dateFilteredData, loc.trim(), range);
     } catch (e) {
       console.error("Errore nel filtro per location:", e);
       locationFilteredData.value = [];
@@ -166,13 +160,10 @@ watch( [locationInput, distanceRange, filteredByDate],
   { immediate: true }
 );
 
-// === Filtro: per variabile ===
-const finalFilteredData = computed(() => {
-  return filterByVariable(locationFilteredData.value, selectedVariable.value);
-});
+// === Nota: filtro per variabile rimosso, quindi usiamo direttamente locationFilteredData come dati finali ===
 
 // === Watch: aggiorna il chart ===
-watch(finalFilteredData, async (newData) => {
+watch(locationFilteredData, async (newData) => {
   try {
     await nextTick();
     if (chartCanvas.value) {
@@ -204,27 +195,25 @@ onMounted(async () => {
 
 // === Paginazione ===
 const totalPages = computed(() => {
-  return Math.ceil(finalFilteredData.value.length / itemsPerPage.value);
+  return Math.ceil(locationFilteredData.value.length / itemsPerPage.value);
 });
 
 const paginatedData = computed(() => {
-  const data = finalFilteredData.value || [];
+  const data = locationFilteredData.value || [];
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
   return data.slice(start, end);
 });
 
-watch(finalFilteredData, () => {
+watch(locationFilteredData, () => {
   currentPage.value = 1;
 });
 
-
 const updateMarkers = computed(() => {
-  return finalFilteredData.value.map(record => ({
+  return locationFilteredData.value.map(record => ({
     lat: record.lat,
     lng: record.lon,
     label: `Buoy: ${record.buoy}\n`
   }));
 });
-
 </script>
