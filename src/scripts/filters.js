@@ -6,28 +6,37 @@ export function filterByDateRange(records, from, to) {
       r._timestamp >= start && r._timestamp <= end
     );
   }
-  
 
-  export function filterByVariable(records, variableName) {
-    if (!variableName || variableName === 'ALL') {
-      // Nessun filtro: ritorna i record così come sono
-      return records;
+
+export function filterByTimeRange(records, from, to) {
+  const timeToMinutes = ms => {
+    const d = new Date(ms);
+    return d.getHours() * 60 + d.getMinutes();
+  };
+
+  const start = timeToMinutes(from);
+  const end = timeToMinutes(to);
+
+  console.log(`Filtro orario attivo: da ${start} a ${end} minuti`);
+
+  return records.filter(r => {
+    const timeInMinutes = timeToMinutes(r._timestamp);
+    console.log(`→ Record ${r._timestamp}: ${timeInMinutes} minuti`);
+
+    if (start <= end) {
+      const inRange = timeInMinutes >= start && timeInMinutes <= end;
+      console.log(`✓ inRange: ${inRange}`);
+      return inRange;
+    } else {
+      
+      const inNightRange = timeInMinutes >= start || timeInMinutes <= end;
+      console.log(`✓ inNightRange: ${inNightRange}`);
+      return inNightRange;
     }
-  
-    return records.map(record => {
-      const filtered = {
-        timestamp: record.timestamp,
-        lat: record.lat,
-        lon: record.lon,
-      };
-  
-      if (record[variableName] !== undefined) {
-        filtered[variableName] = record[variableName];
-      }
-  
-      return filtered;
-    });
-  }
+  });
+}
+
+ 
 
   export async function filterByLocation(records,location,range){
 

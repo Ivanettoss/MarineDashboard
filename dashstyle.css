@@ -237,6 +237,19 @@ tbody tr:hover {
 
 #switch-view:hover { background-color: var(--text-main); }
 
+#reset{ 
+  background-color: var(--primary);
+  border:1px solid;
+  border-color:var(--non-photo-blue);
+  border-radius: 8px;
+  color:white;
+  padding: 10px 20px;
+  font-size: 13px;
+  margin-bottom: 4px;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+#reset:hover { background-color: var(--text-main); border-color:var(--primary);color:var(--background);}
+
 .table-bar {
   display: flex;
   justify-content: space-between;
@@ -270,3 +283,5 @@ tbody tr:hover {
     width: 100%;
   }
 }
+
+

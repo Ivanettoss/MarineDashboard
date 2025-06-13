@@ -54,8 +54,11 @@
       <option :value="1000">1000 km</option>
     </select>
   </div>
+  
 </div>
-
+  <button @click="resetFilters" id="reset">
+    Reset 
+  </button>
       </div>
     </div>
 
@@ -120,7 +123,7 @@
 import { ref, onMounted, computed, watch, nextTick } from "vue";
 import { fetchData } from './scripts/api_management.js';
 import { preprocessRecords } from './scripts/preprocessing.js';
-import { filterByDateRange, filterByLocation } from './scripts/filters.js';
+import { filterByDateRange, filterByLocation, filterByTimeRange } from './scripts/filters.js';
 import { updateChart } from './scripts/chart.js';
 import Map from './components/Map.vue';
 import { NTimePicker, NConfigProvider } from 'naive-ui';
@@ -147,8 +150,19 @@ const locationFilteredData = ref([]);
 
 const fromTime = ref(null);
 const toTime = ref(null);
-// table default, --> map 
 const currentView = ref("table");
+
+function resetFilters() {
+  fromDate.value = "";
+  toDate.value = "";
+  fromTime.value = null;
+  toTime.value = null;
+  locationInput.value = "";
+  distanceRange.value = 100;
+  search.value = "";
+  currentPage.value = 1;
+}
+
 
 // === Filtro: per search ===
 const filteredBySearch = computed(() => {
@@ -158,14 +172,22 @@ const filteredBySearch = computed(() => {
   );
 });
 
-// === Filtro: per date ===
+
 const filteredByDate = computed(() => {
   if (!fromDate.value || !toDate.value) return filteredBySearch.value;
   return filterByDateRange(filteredBySearch.value, fromDate.value, toDate.value);
 });
 
-// === Filtro asincrono: per location ===
-watch([locationInput, distanceRange, filteredByDate],
+const filteredByTime=computed(()=> {
+  if (!fromTime.value || !toTime.value) return filteredByDate.value;
+  return filterByTimeRange(filteredByDate.value, fromTime.value, toTime.value);
+  });
+
+ 
+
+
+
+watch([locationInput, distanceRange, filteredByTime],
   async ([loc, range, dateFilteredData]) => {
     if (!loc.trim()) {
       locationFilteredData.value = dateFilteredData;
@@ -181,7 +203,6 @@ watch([locationInput, distanceRange, filteredByDate],
   { immediate: true }
 );
 
-// === Nota: filtro per variabile rimosso, quindi usiamo direttamente locationFilteredData come dati finali ===
 
 // === Watch: aggiorna il chart ===
 watch(locationFilteredData, async (newData) => {
