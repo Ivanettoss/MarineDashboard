@@ -26,6 +26,19 @@
             <input v-model="toDate" type="date" id="toDate" />
           </div>
         </div>
+
+ <n-config-provider :theme-overrides="theme">
+    <div class="timepicker">
+      <div class="timeline">
+        <label for="fromTime">From Time</label>
+        <n-time-picker id="fromTime" v-model:value="fromTime" format="HH:mm" />
+      </div>
+      <div class="timeline">
+        <label for="toTime">To Time</label>
+        <n-time-picker id="toTime" v-model:value="toTime" format="HH:mm" />
+      </div>
+    </div>
+  </n-config-provider>
         
         <div class="location-filter">
           <label for="locationInput">Filter by Location</label>
@@ -105,6 +118,9 @@ import { preprocessRecords } from './scripts/preprocessing.js';
 import { filterByDateRange, filterByLocation } from './scripts/filters.js';
 import { updateChart } from './scripts/chart.js';
 import Map from './components/Map.vue';
+import { NTimePicker, NConfigProvider } from 'naive-ui';
+import theme from './theme/time-picker-theme.json' // importa il tuo tema personalizzato
+
 
 // === Ref elementi DOM ===
 const chartCanvas = ref(null);
@@ -123,6 +139,9 @@ const locationInput = ref("");
 const distanceRange = ref(100);
 const locationFilteredData = ref([]);
 
+
+const fromTime = ref(null);
+const toTime = ref(null);
 // table default, --> map 
 const currentView = ref("table");
 

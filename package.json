@@ -13,11 +13,17 @@
   "dependencies": {
     "chart.js": "^4.4.9",
     "leaflet": "^1.9.4",
+    "naive-ui": "^2.41.1",
     "vite": "^6.3.5",
     "vue": "^3.5.15",
-    "vue-leaflet": "^0.1.0"
+    "vue-leaflet": "^0.1.0",
+    "vue3-timepicker": "^1.0.0-beta.2",
+    "vuetify": "^3.8.0-beta.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.4"
+    "@vitejs/plugin-vue": "^5.2.4",
+    "deepmerge": "^4.3.1",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5"
   }
 }
