@@ -3,7 +3,7 @@
   --honeydew: #f5f9f7;
   --non-photo-blue: #a8dadc;
   --cerulean: #457b9d;
-  --berkeley-blue: #1d3557;
+  --berkeley-blue: rgb(29, 53, 87);
 
   --background: var(--honeydew);
   --primary: var(--cerulean);
@@ -26,16 +26,15 @@ body {
   margin: 0 auto;
 }
 
-.dashboard-title {
+.dashboard-title,
+.page-indicator,
+.chart-title {
   color: var(--text-main);
   font-weight: bold;
-  margin-bottom: 4px;
 }
 
-.subtitle {
-  color: var(--text-muted);
-  margin-bottom: 20px;
-}
+.dashboard-title { margin-bottom: 4px; }
+.subtitle { color: var(--text-muted); margin-bottom: 20px; }
 
 .filters {
   display: flex;
@@ -44,30 +43,49 @@ body {
   margin-bottom: 15px;
 }
 
-.datepicker {
+.datepicker,
+.timepicker,
+.location-filter {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  color: var(--text-muted);
 }
 
-.dateline {
+.dateline,
+.timeline,
+.location-line {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.dateline label {
+.dateline label,
+.timeline label,
+.location-line label {
   display: inline-block;
-  width: 33px;
   text-align: right;
   color: var(--text-muted);
 }
 
-.location-filter {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  color: var(--text-muted);
+.dateline label { width: 33px; }
+.timeline label,
+.location-line label { width: 80px; }
+
+.timeline .n-time-picker,
+.location-line input,
+.location-line select {
+  flex: 1;
+  max-width: 250px;
+}
+
+.toggle-button,
+.pagination-controls button,
+#switch-view {
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .toggle-button {
@@ -75,8 +93,6 @@ body {
   font-size: 14px;
   background: none;
   border: none;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
   color: var(--primary);
 }
 
@@ -98,13 +114,12 @@ body {
   transition: color 0.2s ease;
 }
 
-.icon:hover {
-  color: var(--text-main);
-}
+.icon:hover { color: var(--text-main); }
 
 input[type="text"],
 input[type="date"],
-select {
+select,
+.search-id {
   padding: 8px;
   border: 1px solid var(--non-photo-blue);
   border-radius: 6px;
@@ -117,7 +132,8 @@ select {
 
 input[type="text"]:focus,
 input[type="date"]:focus,
-select:focus {
+select:focus,
+.search-id:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 5px var(--primary);
@@ -132,15 +148,16 @@ select:focus {
   overflow: hidden;
 }
 
-.table-section {
-  overflow-y: auto;
-  flex: 1;
-}
+.table-section { overflow-y: auto; flex: 1; }
 
 table {
   border-collapse: collapse;
   width: 100%;
   font-family: 'Roboto Mono', monospace;
+}
+
+thead {
+  background-color: var(--table-header);
 }
 
 thead th {
@@ -165,10 +182,6 @@ tbody tr:hover {
   cursor: pointer;
 }
 
-thead {
-  background-color: var(--table-header);
-}
-
 .pagination-controls {
   display: flex;
   justify-content: center;
@@ -178,17 +191,12 @@ thead {
   font-size: 0.8rem;
   height: 35px;
   flex-shrink: 0;
-  font-family: 'Inter', sans-serif;
 }
 
 .pagination-controls button {
   padding: 4px 10px;
   font-size: 0.8rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-family: 'Inter', sans-serif;
   background-color: var(--primary);
   color: white;
 }
@@ -202,22 +210,12 @@ thead {
   cursor: not-allowed;
 }
 
-.page-indicator {
-  font-weight: bold;
-  color: var(--text-main);
-}
-
-.chart-wrapper {
-  margin-top: 100px;
-}
+.chart-wrapper { margin-top: 100px; }
 
 .chart-title {
   margin-bottom: 12px;
   font-size: 1.5rem;
-  color: var(--text-main);
-  font-weight: bold;
   text-align: left;
-  font-family: 'Inter', sans-serif;
 }
 
 .chart-container {
@@ -233,15 +231,11 @@ thead {
   color: white;
   padding: 10px 20px;
   font-size: 13px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
   margin-bottom: 4px;
-  font-family: 'Inter', sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-#switch-view:hover {
-  background-color: var(--text-main);
-}
+#switch-view:hover { background-color: var(--text-main); }
 
 .table-bar {
   display: flex;
@@ -252,20 +246,27 @@ thead {
 
 .search-id {
   margin-left: auto;
-  font-family: 'Inter', sans-serif;
-  border: 1px solid var(--non-photo-blue);
-  padding: 6px 8px;
-  border-radius: 6px;
-  color: var(--text-main);
-  background-color: var(--honeydew);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.search-id:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 5px var(--primary);
-  background-color: white;
+@media (max-width: 600px) {
+  .dateline,
+  .timeline,
+  .location-line {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dateline label,
+  .timeline label,
+  .location-line label {
+    text-align: left;
+    width: auto;
+  }
+
+  .timeline .n-time-picker,
+  .location-line input,
+  .location-line select {
+    max-width: 100%;
+    width: 100%;
+  }
 }
-
-

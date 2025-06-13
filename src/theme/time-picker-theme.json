@@ -2,6 +2,10 @@
   "common": {
     "primaryColor": "#457b9dFF",
     "primaryColorHover": "#457b9d",
-    "borderColor": "rgba(255, 255, 255, 0.24)"
+    "borderColor": "rgba(255, 255, 255, 0.24)",
+    "placeholderColor": "rgba(29, 53, 87, 1)",
+    "iconColor": "rgba(29, 53, 87, 0.68)",
+    "iconColorHover": "rgba(29, 53, 87, 1)"
+    
   }
 }
