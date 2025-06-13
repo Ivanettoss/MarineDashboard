@@ -26,11 +26,9 @@
             <input v-model="toDate" type="date" id="toDate" />
           </div>
         </div>
-
-        <!-- Rimosso filtro variabile -->
-
+        
         <div class="location-filter">
-          <label for="locationInput">Search by Location</label>
+          <label for="locationInput">Filter by Location</label>
           <input v-model="locationInput" type="text" id="locationInput" placeholder="Es. Ibiza..." />
 
           <label for="rangeSelect">Range(km)</label>
@@ -41,17 +39,16 @@
           </select>
         </div>
       </div>
-      <input v-model="search" class="search-id" type="text" placeholder="Search by buoy ID..." />
-
     </div>
 
     
 
- 
+    <div class="table-bar">
      <button id="switch-view" @click="currentView = currentView === 'table' ? 'map' : 'table'">
   {{ currentView === 'table' ? 'Show in Map' : 'Show in Grid' }}
 </button>
-    
+    <input v-model="search" class="search-id" type="text" placeholder="Search by buoy ID..." />
+  </div>
 
     <Map v-if="currentView === 'map'" :markers="updateMarkers" />
      
