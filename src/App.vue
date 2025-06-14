@@ -66,7 +66,7 @@
 
     <div class="table-bar">
      <button id="switch-view" @click="currentView = currentView === 'table' ? 'map' : 'table'">
-  {{ currentView === 'table' ? 'Show in Map' : 'Show in Grid' }}
+  {{ currentView === 'table' ? 'Show in Map' : 'Show in Table' }}
 </button>
     <input v-model="search" class="search-id" type="text" placeholder="Search by buoy ID..." />
   </div>
@@ -218,7 +218,7 @@ watch(locationFilteredData, async (newData) => {
   }
 });
 
-// === Caricamento iniziale ===
+
 onMounted(async () => {
   try {
     const raw = await fetchData();
@@ -228,14 +228,14 @@ onMounted(async () => {
     if (chartCanvas.value) {
       updateChart(chartCanvas.value, processedData.value);
     } else {
-      console.warn("Canvas non trovato durante il montaggio.");
+      console.warn("Canvas not found");
     }
   } catch (err) {
-    console.error("Errore nel caricamento dati:", err);
+    console.error("Error during data loading", err);
   }
 });
 
-// === Paginazione ===
+
 const totalPages = computed(() => {
   return Math.ceil(locationFilteredData.value.length / itemsPerPage.value);
 });
