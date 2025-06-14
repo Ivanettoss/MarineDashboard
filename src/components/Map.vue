@@ -38,15 +38,26 @@
 
   
   function updateMarkers(markers) {
-    // Rimuovi i marker precedenti
     leafletMarkers.forEach(m => map.removeLayer(m));
     leafletMarkers = [];
   
-    // Aggiungi i nuovi marker
     markers.forEach(m => {
-      const marker = L.marker([m.lat, m.lng]).addTo(map).bindPopup(m.label || '');
+        const popupContent = 
+        `
+  <div id="ppopcontent" style="max-width: 250px; font-size: 12px; background: white; color: black;">
+    <div class="row"><span class="label">Buoy:</span> <span class="value">${m.rowData[0]}</span></div>
+    <div class="row"><span class="label">Timestamp:</span> <span class="value">${m.rowData[1]}</span></div>
+    <div class="row"><span class="label">Temp (°C):</span> <span class="value">${m.rowData[2]}</span></div>
+    <div class="row"><span class="label">Salinity:</span> <span class="value">${m.rowData[3]}</span></div>
+    <div class="row"><span class="label">Depth (m):</span> <span class="value">${m.rowData[4]}</span></div>
+  </div>
+
+    `;
+    
+      const marker = L.marker([m.lat, m.lng]).addTo(map).bindPopup(popupContent);
       leafletMarkers.push(marker);
     });
   }
   </script>
-  
+
+

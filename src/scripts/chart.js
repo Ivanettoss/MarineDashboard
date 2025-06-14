@@ -48,7 +48,8 @@ export function updateChart(canvasElement, data) {
     options: {
       responsive: true,
       plugins: {
-        legend: { position: "bottom" },
+        legend: { position: "top" ,
+        },
       },
     },
   });

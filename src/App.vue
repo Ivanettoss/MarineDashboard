@@ -255,7 +255,13 @@ const updateMarkers = computed(() => {
   return locationFilteredData.value.map(record => ({
     lat: record.lat,
     lng: record.lon,
-    label: `Buoy: ${record.buoy}\n`
+     rowData: [
+      record.buoy,
+      record.timestamp,
+      record.temp,
+      record.salinity,
+      record.depth
+    ]
   }));
 });
 </script>
